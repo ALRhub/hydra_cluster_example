@@ -1,0 +1,21 @@
+defaults:
+  - algorithm: mlp
+  - dataset: line
+  - platform: bwuni_dev_gpu_4
+  - _self_
+
+
+epochs: 300
+device: cuda
+name: exp_4_bwuni_dev_line
+group_name: bwuni_dev
+visualize: True
+wandb: True
+seed: 100
+
+hydra:
+  # don't need to specify mode: MULTIRUN, because it's in the platform config
+  sweeper:
+    params:
+      seed: 0, 1, 2  # starts 3 jobs in parallel
+

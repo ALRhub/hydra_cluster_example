@@ -7,8 +7,8 @@ defaults:
 
 epochs: 300
 device: cuda
-name: exp_2_bwuni_dev_line
-group_name: bwuni_dev
+name: exp_5_bwuni_line
+group_name: bwuni
 visualize: True
 wandb: True
 seed: 100
@@ -17,5 +17,5 @@ hydra:
   # don't need to specify mode: MULTIRUN, because it's in the platform config
   sweeper:
     params:
-      seed: 0, 1, 2  # starts 3 jobs in parallel
+      seed: 0, 1, 2, 3  # starts 4 jobs in parallel
 

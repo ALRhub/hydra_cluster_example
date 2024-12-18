@@ -7,7 +7,7 @@ defaults:
 
 epochs: 300
 device: cuda
-name: exp_1_local_multirun_line
+name: exp_3_local_multirun_line
 group_name: local_multirun
 visualize: True
 wandb: True

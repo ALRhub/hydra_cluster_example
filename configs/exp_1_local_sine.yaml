@@ -4,12 +4,11 @@ defaults:
   - platform: local
   - _self_
 
-algorithm.activation_function: relu
 
-epochs: 1000
+epochs: 500
 device: cuda
-name: exp_1_local_relu
+name: exp_1_local_sine
 group_name: local
 visualize: True
-wandb: True
+wandb: False  # Change this to True to enable WandB logging!
 seed: 100

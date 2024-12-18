@@ -2,6 +2,7 @@ import torch.nn
 
 
 class MLP:
+    # for bigger projects, you should also have an abstract algorithm class with the interfaces
     def __init__(self, algorithm_config, device):
         self.algorithm_config = algorithm_config
         self.device = device

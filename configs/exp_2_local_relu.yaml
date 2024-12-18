@@ -4,10 +4,13 @@ defaults:
   - platform: local
   - _self_
 
+# overwrite a specific value of the default config
+algorithm:
+  activation_function: relu
 
-epochs: 1000
+epochs: 500
 device: cuda
-name: exp_1_local_sine
+name: exp_2_local_relu
 group_name: local
 visualize: True
 wandb: True
