@@ -1,0 +1,14 @@
+defaults:
+  - algorithm: mlp
+  - dataset: sine
+  - _self_
+
+algorithm.activation_function: relu
+
+epochs: 1000
+device: cuda
+name: exp_1_local_relu
+group_name: local
+visualize: True
+wandb: True
+seed: 100
