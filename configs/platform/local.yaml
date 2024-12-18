@@ -1,6 +1,8 @@
+# @package _global_
+
 hydra:
   run:
-    dir: ./output/hydra/training/${now:%Y-%m-%d}/${name}
+    dir: ./outputs/training/${now:%Y-%m-%d}/${name}
   sweep:
-    dir: ./output/hydra/training/${now:%Y-%m-%d}
+    dir: ./outputs/training/${now:%Y-%m-%d}
     subdir: ${name}/seed_${seed}

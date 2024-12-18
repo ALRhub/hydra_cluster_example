@@ -43,14 +43,14 @@ def main(config) -> None:
             wandb.log({"train_loss": train_loss, "test_loss": test_loss, "epoch": epoch}, step=epoch)
         if epoch % 100 == 0 and config.visualize:
             # visualize
-            visualize(algorithm, train_ds, device, show=not config.wandb)
+            vis_path = visualize(algorithm, train_ds, device, epoch, show=not config.wandb)
             if config.wandb:
-                wandb.log({"prediction": wandb.Image("outputs/prediction.png")}, step=epoch)
+                wandb.log({"prediction": wandb.Image(vis_path)}, step=epoch)
     if config.wandb:
         wandb.finish()
 
 
-def visualize(algorithm, train_ds, device, show=True):
+def visualize(algorithm, train_ds, device, epoch, show=True):
     import matplotlib.pyplot as plt
     import numpy as np
     x = torch.linspace(0, 1, 100).view(-1, 1)
@@ -68,10 +68,14 @@ def visualize(algorithm, train_ds, device, show=True):
     plt.legend()
     if show:
         plt.show()
+        return None
     else:
-        os.makedirs("outputs", exist_ok=True)
-        plt.savefig("outputs/prediction.png")
+        # hydra save dir
+        recording_dir = hydra.core.hydra_config.HydraConfig.get().runtime.output_dir
+        save_path = os.path.join(recording_dir, f"prediction_epoch_{epoch}.png")
+        plt.savefig(save_path)
         plt.close()
+        return save_path
 
 
 

@@ -1,6 +1,7 @@
 defaults:
   - algorithm: mlp
   - dataset: line
+  - platform: local
   - _self_
 
 
