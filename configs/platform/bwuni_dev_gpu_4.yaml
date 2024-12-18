@@ -5,6 +5,11 @@ defaults:
 
 hydra:
   mode: MULTIRUN  # needed for launcher to be used
+  run:
+    dir: ./output/hydra/training/${now:%Y-%m-%d}/${name}
+  sweep:
+    dir: ./output/hydra/training/${now:%Y-%m-%d}
+    subdir: ${name}/seed_${seed}
   launcher:
     # launcher/cluster specific options
     partition: "dev_gpu_4"

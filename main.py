@@ -1,4 +1,5 @@
 import argparse
+import os
 
 import hydra
 import numpy as np
@@ -68,6 +69,7 @@ def visualize(algorithm, train_ds, device, show=True):
     if show:
         plt.show()
     else:
+        os.makedirs("outputs", exist_ok=True)
         plt.savefig("outputs/prediction.png")
         plt.close()
 
