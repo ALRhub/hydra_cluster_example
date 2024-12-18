@@ -109,7 +109,7 @@ Now we are ready to deploy our code on a Slurm cluster. We will use the BwUni Cl
 
 As a first step, log in on the cluster, clone this repository and install it in a virtual environment. 
 
-### Submitting a Job
+### Submitting your first Job
 Hydra has a nice plugin to submit slurm jobs, where you don't have to touch any bash scripts. We configure the parameters of that in the `platform` subconfig.
 Take a look at `configs/platform/bwuni_dev_gpu_4.yaml`:
 ```yaml
@@ -145,4 +145,8 @@ python main.py --config-name exp_4_bwuni_dev
 This config is similar to the local multirun config, but it uses the bwuni platform config. You should see a new job being submitted to the cluster.
 Check their status using `squeue`. Normally, they should deploy within a few minutes. The results are plotted to wandb again.
 
+### Submitting the Job on the Real Queue
+The dev queue is nice for debugging, but due to the time limit of 30 minutes, it is not practical for real experiments.
+The `config/exp_5_bwuni.yaml` config uses the `bwuni_all_gpus` platform, which submits the job to all possible gpu queues.
+Try to run this config on the cluster. The waiting time might now be much longer. In general, a shorter timeout_min results in a higher priority.
 
