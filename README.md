@@ -105,5 +105,44 @@ If you are interested in a "list"/"tuple" search, check out my repository
 
 ## Slurm Cluster
 
-Now we are ready to deploy our code on a Slurm cluster.
+Now we are ready to deploy our code on a Slurm cluster. We will use the BwUni Cluster as an example cluster, but every Slurm cluster should work similarly.
+
+As a first step, log in on the cluster, clone this repository and install it in a virtual environment. 
+
+### Submitting a Job
+Hydra has a nice plugin to submit slurm jobs, where you don't have to touch any bash scripts. We configure the parameters of that in the `platform` subconfig.
+Take a look at `configs/platform/bwuni_dev_gpu_4.yaml`:
+```yaml
+# @package _global_
+
+defaults:
+  - override /hydra/launcher: submitit_slurm
+
+hydra:
+  mode: MULTIRUN  # needed for launcher to be used
+  run:
+    dir: ./outputs/training/${now:%Y-%m-%d}/${name}
+  sweep:
+    dir: ./outputs/training/${now:%Y-%m-%d}
+    subdir: ${name}/seed_${seed}
+  launcher:
+    # launcher/cluster specific options
+    partition: "dev_gpu_4"
+    timeout_min: 30 # in minutes, maximum time on this queue
+    gres: gpu:1  # one gpu allocated
+    mem_per_gpu: 94000  # in MB
+    additional_parameters:
+      cpus-per-task: 4  # maybe more?
+```
+This configuration tells Hydra to use the `submitit_slurm` launcher and to submit the job to the `dev_gpu_4` partition. In the `launcher` section,
+you can specifiy the timeout (how long the job is allowed to run), the number of gpus, the memory per gpu, and additional parameters like the number of cpus per task.
+On the `dev_gpu_4` queue, jobs are limited to 30 minutes.
+
+Now, you can submit the job by executing the following command on the cluster:
+```bash
+python main.py --config-name exp_4_bwuni_dev
+```
+This config is similar to the local multirun config, but it uses the bwuni platform config. You should see a new job being submitted to the cluster.
+Check their status using `squeue`. Normally, they should deploy within a few minutes. The results are plotted to wandb again.
+
 
