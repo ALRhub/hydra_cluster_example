@@ -7,9 +7,9 @@ defaults:
 
 epochs: 300
 device: cuda
-name: exp_1_bwuni_dev_line
+name: exp_2_bwuni_dev_line
 group_name: bwuni_dev
-visualize: False
+visualize: True
 wandb: True
 seed: 100
 
