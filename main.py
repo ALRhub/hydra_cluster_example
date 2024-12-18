@@ -78,7 +78,8 @@ def visualize(algorithm, train_ds, device, epoch, show=True):
     pred = pred[:, 0].cpu().numpy()
     plt.plot(x, y, label="Ground Truth")
     plt.plot(x, pred, label="Prediction")
-    plt.scatter(train_ds.x, train_ds.y, label="Noisy Train Data", color="red", marker="x", s=10)
+    # if you want to plot the train data as well, uncomment the next line
+    # plt.scatter(train_ds.x, train_ds.y, label="Noisy Train Data", color="red", marker="x", s=10)
     plt.legend()
     if show:
         plt.show()

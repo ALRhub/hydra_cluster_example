@@ -1,6 +1,6 @@
 # Hydra Cluster Example
 
-This repository contains a simple example of a Hydra project and how to use it with a Slurm cluster. This Readme will serve as a tutorial for Hydra, WandB, and Slurm deployment.
+This repository contains a simple example of a Hydra project and how to use it with a Slurm cluster and WandB integration. This Readme will serve as a tutorial to walk you through the individual steps.
 
 ## Installation
 Create a new virtual environment (using conda, mamba, or virtualenv) and install the repository as a local package
@@ -9,8 +9,8 @@ Create a new virtual environment (using conda, mamba, or virtualenv) and install
 pip install -e .
 ```
 ## Project Source Code
-Have a look at the source files in the `src` directory. This projects implements a simple 1d regression task with a MLP model using torch and should
-be fairly easy to understand. You notice that every class takes as an input a config dict. This is a common pattern in Hydra projects.
+Have a look at the source files in the `src` directory and the `main.py` entry point. This projects implements a simple 1d regression task with a MLP model using torch and should
+be fairly easy to understand with a fundamental machine learning background. Notice that every class takes as an input a config dict. This is a common pattern in Hydra projects.
 
 ## Hydra Concept
 Hydra is a powerful framework for configuring complex applications. It allows you to define  hyperparameter configurations 
@@ -40,7 +40,7 @@ device: cuda
 name: exp_1_local_sine
 group_name: local
 visualize: True
-wandb: True
+wandb: False
 seed: 100
 ```
 Importantly, in the `- platform: local` config, we define where the experiments should be saved. If you take a look at the config itself (`configs/platform/local.yaml`), you see that it starts with the line
@@ -63,7 +63,8 @@ Now you should see the loss curve better.
 2 Things are recommended to change in the WandB GUI:
 1. Group your runs to "Group" and "Job Type":
 ![img.png](data/grouping.png)
-Groups are bigger gropus of runs, while Job Type can be seen as a sub group of a group. In our case, a job type only contains the same configuration, but we save multiple executions with different seeds in it.
+
+    Groups are bigger gropus of runs, while Job Type can be seen as a sub group of a group. In our case, a job type only contains the same configuration, but we save multiple executions with different seeds in it.
 2. Go to "Settings" (top right) -> "Line Plots" -> Tick "Random sampling" to see the correct grouping of multiple runs.
 ![img.png](data/random_sampling.png)
 
@@ -77,10 +78,11 @@ Compare both runs. You should observe that ReLU converges faster than Tanh activ
 However, the ReLU prediction is a step wise linear function and looks janky, if you take a look a the the prediction plot:
 ![img.png](data/relu_vs_tanh_qualitative.png)
 
-This is all easily compared in the WandB GUI.
+This can be all easily compared in the WandB GUI. Hopefully, this helps you to get a better understanding of your experiments.
 
 ## Hydra Sweeper and Multirun
-Hydra also provides a powerful tool for running multiple experiments in parallel. This is done with the `MULTIRUN` flag.
+Hydra also provides a powerful tool for defining multiple experiments at once. Useful applications are hyperparameter grid search or rerunning your experiment with different seeds.
+This is done with the `MULTIRUN` flag.
 
 Take a look at `configs/exp_3_local_multirun.yaml`. It has this new section:
 
@@ -92,9 +94,8 @@ hydra:
       seed: 0, 1, 2  # starts 3 jobs sequentially, overwrites seed value
 ```
 With this configuration, we start 3 jobs sequentially with different seeds. This is useful if you want to increase the statistical significance of your results.
-Also, all runs on the cluster are only executed using the MULTIRUN mode.
 
-In WandB, you should see now an aggregated line plot of these 3 runs, when selecting the group `local_multirun` to visualize.
+Once you run this config, you should see in WandB now an aggregated line plot of these 3 runs.
 ![img.png](data/multi_run_result.png)
 
 Specific aggregation methods can be changed by the "Edit panel" option.
@@ -106,8 +107,9 @@ If you are interested in a "list"/"tuple" search, check out my repository
 ## Slurm Cluster
 
 Now we are ready to deploy our code on a Slurm cluster. We will use the BwUni Cluster as an example cluster, but every Slurm cluster should work similarly.
+As a general rule, all runs on the cluster are only executed using the MULTIRUN mode.
 
-As a first step, log in on the cluster, clone this repository and install it in a virtual environment. 
+The first step is to log in on the cluster, clone this repository and install it in a virtual environment. Then you are ready to submit your first job. 
 
 ### Submitting your first Job
 Hydra has a nice plugin to submit slurm jobs, where you don't have to touch any bash scripts. We configure the parameters of that in the `platform` subconfig.
@@ -149,4 +151,9 @@ Check their status using `squeue`. Normally, they should deploy within a few min
 The dev queue is nice for debugging, but due to the time limit of 30 minutes, it is not practical for real experiments.
 The `config/exp_5_bwuni.yaml` config uses the `bwuni_all_gpus` platform, which submits the job to all possible gpu queues.
 Try to run this config on the cluster. The waiting time might now be much longer. In general, a shorter timeout_min results in a higher priority.
+Another useful command to get an upper bound of the waiting time is `squeue --start`. To find out which partitions are currently idle, check out `sinfo_t_idle`.
+
+# Conclusion
+This repository showed you how to use Hydra, WandB, and Slurm together. This is a powerful combination to manage your experiments and to deploy them on a cluster.
+I hope this tutorial was helpful to you. If you have any questions, feel free to contact me. (philipp.dahlinger@kit.edu)
 
