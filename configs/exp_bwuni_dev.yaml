@@ -1,0 +1,21 @@
+defaults:
+  - algorithm: mlp
+  - dataset: line
+  - platform: bwuni_dev_gpu_4
+  - _self_
+
+
+epochs: 300
+device: cuda
+name: exp_1_local_multirun_line
+group_name: local_multirun
+visualize: True
+wandb: True
+seed: 100
+
+hydra:
+  mode: MULTIRUN
+  sweeper:
+    params:
+      seed: 0, 1, 2  # starts 3 jobs sequentially, overwrites seed value
+
