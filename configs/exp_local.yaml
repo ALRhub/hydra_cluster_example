@@ -6,7 +6,8 @@ defaults:
 
 epochs: 1000
 device: cuda
-name: exp_1_line
-group_name: line
+name: exp_1_local_sine
+group_name: local
 visualize: True
-
+wandb: True
+seed: 100

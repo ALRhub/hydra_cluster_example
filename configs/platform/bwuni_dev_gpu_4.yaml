@@ -1,0 +1,16 @@
+# @package _global_
+
+defaults:
+  - override /hydra/launcher: submitit_slurm
+
+hydra:
+  mode: MULTIRUN  # needed for launcher to be used
+  launcher:
+    # launcher/cluster specific options
+    partition: "dev_gpu_4"
+    timeout_min: 30 # in minutes, maximum time on this queue
+    gres: gpu:1  # one gpu allocated
+    mem_per_gpu: 94000  # in MB
+    additional_parameters:
+      cpus-per-task: 4  # maybe more?
+
