@@ -1,0 +1,8 @@
+name: mlp
+
+input_size: 1
+output_size: 1
+hidden_size: 128
+activation_function: tanh
+
+learning_rate: 0.008

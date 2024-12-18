@@ -1,0 +1,9 @@
+README.md
+setup.cfg
+setup.py
+src/hydra_cluster_example/__init__.py
+src/hydra_cluster_example.egg-info/PKG-INFO
+src/hydra_cluster_example.egg-info/SOURCES.txt
+src/hydra_cluster_example.egg-info/dependency_links.txt
+src/hydra_cluster_example.egg-info/requires.txt
+src/hydra_cluster_example.egg-info/top_level.txt

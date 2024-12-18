@@ -1,0 +1,7 @@
+numpy
+tqdm
+wandb
+omegaconf
+torch
+hydra-submitit-launcher
+matplotlib

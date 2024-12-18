@@ -1,0 +1,6 @@
+name: sine
+
+batch_size: 128
+
+num_points: 500
+noise: 0.01

@@ -1,0 +1,12 @@
+defaults:
+  - algorithm: mlp
+  - dataset: sine
+  - _self_
+
+
+epochs: 1000
+device: cuda
+name: exp_1_line
+group_name: line
+visualize: True
+

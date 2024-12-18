@@ -1,0 +1,18 @@
+Metadata-Version: 2.1
+Name: hydra_cluster_example
+Version: 0.0.1
+Summary: Example Research project to setup your hydra and slurm configuration
+Author: Philipp Dahlinger
+License: tbd
+Platform: linux
+Platform: osx
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Python: >=3.8
+Requires-Dist: numpy
+Requires-Dist: tqdm
+Requires-Dist: wandb
+Requires-Dist: omegaconf
+Requires-Dist: torch
+Requires-Dist: hydra-submitit-launcher
+Requires-Dist: matplotlib
