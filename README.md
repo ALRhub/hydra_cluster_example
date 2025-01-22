@@ -136,7 +136,13 @@ hydra:
     additional_parameters:
       cpus-per-task: 4  # maybe more?
 ```
-This configuration tells Hydra to use the `submitit_slurm` launcher and to submit the job to the `dev_gpu_4` partition. In the `launcher` section,
+This configuration tells Hydra to use the `submitit_slurm` launcher and to submit the job to the `dev_gpu_4` partition.
+Check that you have the `hydra-submitit-launcher` package installed:
+```bash
+pip install hydra-submitit-launcher
+```
+
+In the `launcher` section,
 you can specifiy the timeout (how long the job is allowed to run), the number of gpus, the memory per gpu, and additional parameters like the number of cpus per task.
 On the `dev_gpu_4` queue, jobs are limited to 30 minutes.
 
