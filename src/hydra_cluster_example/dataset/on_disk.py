@@ -8,6 +8,9 @@ class OnDiskDataset(torch.utils.data.Dataset):
     def __init__(self, config, train=True):
         super().__init__()
         self.config = config
+        print("In OnDiskDataset")
+        print("Path to dataset: ", config.path_to_dataset)
+        print("joined path: ", os.path.join(config.path_to_dataset, "on_disk_train.hdf5"))
         if train:
             self.file_path = os.path.join(config.path_to_dataset, "on_disk_train.hdf5")
         else:
