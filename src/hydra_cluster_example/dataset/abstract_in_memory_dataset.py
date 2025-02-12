@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 import torch
 
 
-class AbstractDataset(torch.utils.data.Dataset):
+class AbstractInMemoryDataset(torch.utils.data.Dataset):
     def __init__(self, config):
         super().__init__()
         self.config = config

@@ -1,0 +1,4 @@
+name: on_disk
+
+batch_size: 128
+path_to_dataset: outputs/datasets

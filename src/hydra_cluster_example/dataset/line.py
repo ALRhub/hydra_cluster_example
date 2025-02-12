@@ -1,9 +1,9 @@
 import torch
 
-from hydra_cluster_example.dataset.abstract_dataset import AbstractDataset
+from hydra_cluster_example.dataset.abstract_in_memory_dataset import AbstractInMemoryDataset
 
 
-class LineDataset(AbstractDataset):
+class LineDataset(AbstractInMemoryDataset):
     def __init__(self, config):
         super().__init__(config)
 
