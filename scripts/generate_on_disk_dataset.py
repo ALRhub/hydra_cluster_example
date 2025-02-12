@@ -8,7 +8,8 @@ def generate_dataset(output_path):
     noise = 0.01
     x = torch.linspace(0, 1, data_points).view(-1, 1)
     y = 0.1 * torch.sin(2 * torch.pi * x) + x ** 2 + noise * torch.randn(data_points, 1)
-
+    # create folders
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with h5py.File(output_path, "w") as f:
         f.create_dataset("x", data=x)
         f.create_dataset("y", data=y)
