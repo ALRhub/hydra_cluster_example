@@ -5,7 +5,7 @@ defaults:
 
 # change path_to_dataset in dataset to the TMPDIR
 dataset:
-  path_to_dataset: $TMPDIR
+  path_to_dataset: "$TMPDIR"
 
 hydra:
   mode: MULTIRUN  # needed for launcher to be used
@@ -23,6 +23,6 @@ hydra:
     additional_parameters:
       cpus-per-task: 4  # maybe more?
     setup:
-      - cp ./outputs/datasets/on_disk_train.hdf5 $TMPDIR/on_disk_train.hdf5
-      - cp ./outputs/datasets/on_disk_test.hdf5 $TMPDIR/on_disk_test.hdf5
+      - "cp ./outputs/datasets/on_disk_train.hdf5 $TMPDIR/on_disk_train.hdf5"
+      - "cp ./outputs/datasets/on_disk_test.hdf5 $TMPDIR/on_disk_test.hdf5"
 
