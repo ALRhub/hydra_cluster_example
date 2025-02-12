@@ -25,4 +25,5 @@ hydra:
     setup:
       - "cp ./outputs/datasets/on_disk_train.hdf5 $TMPDIR/on_disk_train.hdf5"
       - "cp ./outputs/datasets/on_disk_test.hdf5 $TMPDIR/on_disk_test.hdf5"
+      - "echo 'Copied dataset to $TMPDIR'"
 
