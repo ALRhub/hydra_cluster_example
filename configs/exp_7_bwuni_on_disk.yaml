@@ -12,3 +12,9 @@ group_name: local
 visualize: True
 wandb: True  # Change this to True to enable WandB logging!
 seed: 100
+
+hydra:
+  # don't need to specify mode: MULTIRUN, because it's in the platform config
+  sweeper:
+    params:
+      seed: 0
