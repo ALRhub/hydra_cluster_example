@@ -8,16 +8,15 @@ class OnDiskDataset(torch.utils.data.Dataset):
     def __init__(self, config, train=True):
         super().__init__()
         self.config = config
-        print("In OnDiskDataset")
-        # print("Path to dataset: ", config.path_to_dataset)
-        # print("list dir hydra: ", os.listdir(config.path_to_dataset))
-        print("list dir directly: ", os.listdir("$TMPDIR"))
+        path_to_dataset = config.path_to_dataset
+        if path_to_dataset.startswith("$TMPDIR"):
+            # replace env variable with actual path
+            path_to_dataset = os.path.expandvars(path_to_dataset)
 
-        print("joined path: ", os.path.join("$TMPDIR", "on_disk_train.hdf5"))
         if train:
-            self.file_path = os.path.join("$TMPDIR", "on_disk_train.hdf5")
+            self.file_path = os.path.join(path_to_dataset, "on_disk_train.hdf5")
         else:
-            self.file_path = os.path.join("$TMPDIR", "on_disk_test.hdf5")
+            self.file_path = os.path.join(path_to_dataset, "on_disk_test.hdf5")
         with h5py.File(self.file_path, "r") as hdf:
             self.length = len(hdf["x"])
 

@@ -5,7 +5,7 @@ defaults:
 
 # change path_to_dataset in dataset to the TMPDIR
 dataset:
-  path_to_dataset: $TMPDIR
+  path_to_dataset: "$TMPDIR"
 
 hydra:
   mode: MULTIRUN  # needed for launcher to be used
