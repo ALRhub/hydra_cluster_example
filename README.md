@@ -194,6 +194,8 @@ If your dataset is very big and you want to debug stuff, it might make sense to 
 In general, you should always use the `$TMPDIR` folder if you are dealing with big datasets on the cluster. Never load them from your home directory for every step. 
 The BwUni Cluster checks the amount if I/O operations and might kill your job if you exceed the limit. Also, it is way slower and inefficient.
 
+Note that loading from disk during `__getitem__` is slower than loading it from memory (even with multiple workers, compare the epoch over time plot in wandb for that!). Therefore, if you have a dataset that fits into memory, you should go for the simpler option and load it into memory during `__init__`. 
+
 # Conclusion
 This repository showed you how to use Hydra, WandB, and Slurm together. This is a powerful combination to manage your experiments and to deploy them on a cluster.
 I hope this tutorial was helpful to you. If you have any questions, feel free to contact me. (philipp.dahlinger@kit.edu)
