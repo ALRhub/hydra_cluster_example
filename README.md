@@ -159,6 +159,13 @@ The `config/exp_5_bwuni.yaml` config uses the `bwuni_all_gpus` platform, which s
 Try to run this config on the cluster. The waiting time might now be much longer. In general, a shorter timeout_min results in a higher priority.
 Another useful command to get an upper bound of the waiting time is `squeue --start`. To find out which partitions are currently idle, check out `sinfo_t_idle`.
 
+## Big Datasets on Slurm
+Sometimes, you work with datasets which do not completely fit in memory and you have to load them from disk. This can be a problem on a cluster, since the workspace or your home directory is a network drive which input/output operations are slow.
+For these cases, the BwUni cluster provides a fast SSD for temporary storage using the environment variable `$TMPDIR`. The workflow is now the following:
+1. In your submitit config, add a line to copy the data to the temporary storage `$TMPDIR`.
+2. Implement a dataset which loads the requested index from the temporary storage `$TMPDIR`.
+3. Use a dataloader with multiple workers to load the data in parallel.
+
 # Conclusion
 This repository showed you how to use Hydra, WandB, and Slurm together. This is a powerful combination to manage your experiments and to deploy them on a cluster.
 I hope this tutorial was helpful to you. If you have any questions, feel free to contact me. (philipp.dahlinger@kit.edu)

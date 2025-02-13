@@ -7,7 +7,7 @@ defaults:
 
 epochs: 500
 device: cuda
-name: exp_7_bwuni_on_disk
+name: exp_7_1_bwuni_on_disk
 group_name: bwuni_dev
 visualize: True
 wandb: True  # Change this to True to enable WandB logging!
