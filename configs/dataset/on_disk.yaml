@@ -1,4 +1,5 @@
 name: on_disk
 
 batch_size: 128
+num_workers: 4  # use 4 additional processes to load data
 path_to_dataset: outputs/datasets

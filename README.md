@@ -160,11 +160,39 @@ Try to run this config on the cluster. The waiting time might now be much longer
 Another useful command to get an upper bound of the waiting time is `squeue --start`. To find out which partitions are currently idle, check out `sinfo_t_idle`.
 
 ## Big Datasets on Slurm
-Sometimes, you work with datasets which do not completely fit in memory and you have to load them from disk. This can be a problem on a cluster, since the workspace or your home directory is a network drive which input/output operations are slow.
-For these cases, the BwUni cluster provides a fast SSD for temporary storage using the environment variable `$TMPDIR`. The workflow is now the following:
+Sometimes, you work with datasets that do not fully fit in memory and must be loaded from disk. This can be problematic on a cluster, as your workspace or home directory is typically a network drive, where input/output operations are slow. To address this, the BwUni cluster provides a fast SSD for temporary storage, accessible via the environment variable `$TMPDIR`. This storage is physically mounted on the machine where your job is executed. The recommended workflow is as follows:
 1. In your submitit config, add a line to copy the data to the temporary storage `$TMPDIR`.
 2. Implement a dataset which loads the requested index from the temporary storage `$TMPDIR`.
 3. Use a dataloader with multiple workers to load the data in parallel.
+
+To give more detail, you can give a list of bash commands in the `setup` section of the submitit config which are executed before the job starts:
+```yaml
+    hydra:
+       launcher:
+          setup:
+            - cp ./outputs/datasets/on_disk_train.hdf5 $TMPDIR/on_disk_train.hdf5
+            - cp ./outputs/datasets/on_disk_test.hdf5 $TMPDIR/on_disk_test.hdf5
+```
+It is also useful to change the `path_to_dataset` in the `dataset` config to `$TMPDIR`. This is also done in the platform config:
+```yaml
+dataset:
+  path_to_dataset: "$TMPDIR"
+```
+We added both changes to the platform configs `bwuni_dev_gpu_4_copy_dataset` and `bwuni_all_gpus_copy_dataset`.
+
+In this example, we use the HDF5 format to store the dataset. This is convenient, since you can save the dataset as one file, but still access it in parallel. Checkout https://docs.h5py.org/en/latest/quick.html for more information on how to use HDF5 with python.
+The dataset class now does not load the full data into memory during `__init__`. Instead, the data is accessed during the `__getitem__` method from the temporary storage `$TMPDIR`. 
+The dataset class in `dataset/on_disk.py` shows how to do this. 
+If you don't work with an HDF5 file but with a folder of datapoints instead, you should always copy a zipped version and then unzip the dataset using another command in the `setup` section.
+This makes the copying process much faster and reduces the I/O operations.
+
+Since loading from an SSD is still slower than memory access, it is advisable to have multiple workers in the dataloader to load the data in parallel.
+We set the number of workers in the `dataset` config to `4` for the `on_disk` dataset. The in-memory dataset does not use separate workers, hence the default value of `0`.
+
+If your dataset is very big and you want to debug stuff, it might make sense to create a debug dataset and use that. Then the copying of the dataset does not take that long.
+
+In general, you should always use the `$TMPDIR` folder if you are dealing with big datasets on the cluster. Never load them from your home directory for every step. 
+The BwUni Cluster checks the amount if I/O operations and might kill your job if you exceed the limit. Also, it is way slower and inefficient.
 
 # Conclusion
 This repository showed you how to use Hydra, WandB, and Slurm together. This is a powerful combination to manage your experiments and to deploy them on a cluster.

@@ -1,6 +1,7 @@
 name: sine
 
 batch_size: 128
+num_workers: 0  # 0 means start no additional processes, but use the main process. For small in-memory dataset, this makes sense
 
 num_points: 500
 noise: 0.01

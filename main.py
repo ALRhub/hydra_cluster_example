@@ -50,8 +50,10 @@ def initialize(config):
     print("Training on device {}".format(device))
     # loading data
     train_ds, test_ds = get_dataset(config.dataset)
-    train_dl = torch.utils.data.DataLoader(train_ds, batch_size=config.dataset.batch_size, shuffle=True, num_workers=4, pin_memory=True)
-    test_dl = torch.utils.data.DataLoader(test_ds, batch_size=config.dataset.batch_size, shuffle=False, num_workers=4, pin_memory=True)
+    train_dl = torch.utils.data.DataLoader(train_ds, batch_size=config.dataset.batch_size, shuffle=True,
+                                           num_workers=config.dataset.num_workers, pin_memory=True)
+    test_dl = torch.utils.data.DataLoader(test_ds, batch_size=config.dataset.batch_size, shuffle=False,
+                                          num_workers=config.dataset.num_workers, pin_memory=True)
     # get algorithm
     algorithm = get_algorithm(config.algorithm, device)
     if config.wandb:
@@ -91,8 +93,6 @@ def visualize(algorithm, train_ds, device, epoch, show=True):
         plt.savefig(save_path)
         plt.close()
         return save_path
-
-
 
 
 if __name__ == '__main__':
