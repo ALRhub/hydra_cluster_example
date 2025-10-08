@@ -1,7 +1,7 @@
 defaults:
   - algorithm: mlp
   - dataset: line
-  - platform: bwuni_dev_gpu_4
+  - platform: bwuni_dev
   - _self_
 
 

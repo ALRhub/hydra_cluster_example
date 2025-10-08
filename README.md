@@ -106,14 +106,14 @@ If you are interested in a "list"/"tuple" search, check out my repository
 
 ## Slurm Cluster
 
-Now we are ready to deploy our code on a Slurm cluster. We will use the BwUni Cluster as an example cluster, but every Slurm cluster should work similarly.
+Now we are ready to deploy our code on a Slurm cluster. We will use the BwUni 3.0 Cluster as an example cluster, but every Slurm cluster should work similarly.
 As a general rule, all runs on the cluster are only executed using the MULTIRUN mode.
 
 The first step is to log in on the cluster, clone this repository and install it in a virtual environment. Then you are ready to submit your first job. 
 
 ### Submitting your first Job
 Hydra has a nice plugin to submit slurm jobs, where you don't have to touch any bash scripts. We configure the parameters of that in the `platform` subconfig.
-Take a look at `configs/platform/bwuni_dev_gpu_4.yaml`:
+Take a look at `configs/platform/bwuni_dev.yaml`:
 ```yaml
 # @package _global_
 
@@ -129,22 +129,19 @@ hydra:
     subdir: ${name}/seed_${seed}
   launcher:
     # launcher/cluster specific options
-    partition: "dev_gpu_4"
+    partition: "gpu_a100_short,dev_gpu_h100,dev_gpu_a100_il"
     timeout_min: 30 # in minutes, maximum time on this queue
     gres: gpu:1  # one gpu allocated
-    mem_per_gpu: 94000  # in MB
-    additional_parameters:
-      cpus-per-task: 4  # maybe more?
 ```
-This configuration tells Hydra to use the `submitit_slurm` launcher and to submit the job to the `dev_gpu_4` partition.
+This configuration tells Hydra to use the `submitit_slurm` launcher and to submit the job to the development partitions.
 Check that you have the `hydra-submitit-launcher` package installed:
 ```bash
 pip install hydra-submitit-launcher
 ```
 
 In the `launcher` section,
-you can specifiy the timeout (how long the job is allowed to run), the number of gpus, the memory per gpu, and additional parameters like the number of cpus per task.
-On the `dev_gpu_4` queue, jobs are limited to 30 minutes.
+you can specifiy the timeout (how long the job is allowed to run) and the number of gpus.
+On the development queues, jobs are limited to 30 minutes.
 
 Now, you can submit the job by executing the following command on the cluster:
 ```bash
@@ -155,7 +152,7 @@ Check their status using `squeue`. Normally, they should deploy within a few min
 
 ### Submitting the Job on the Real Queue
 The dev queue is nice for debugging, but due to the time limit of 30 minutes, it is not practical for real experiments.
-The `config/exp_5_bwuni.yaml` config uses the `bwuni_all_gpus` platform, which submits the job to all possible gpu queues.
+The `config/exp_5_bwuni.yaml` config uses the `bwuni` platform, which submits the job to all possible gpu queues.
 Try to run this config on the cluster. The waiting time might now be much longer. In general, a shorter timeout_min results in a higher priority.
 Another useful command to get an upper bound of the waiting time is `squeue --start`. To find out which partitions are currently idle, check out `sinfo_t_idle`.
 
@@ -178,7 +175,7 @@ It is also useful to change the `path_to_dataset` in the `dataset` config to `$T
 dataset:
   path_to_dataset: "$TMPDIR"
 ```
-We added both changes to the platform configs `bwuni_dev_gpu_4_copy_dataset` and `bwuni_all_gpus_copy_dataset`.
+We added both changes to the platform configs `bwuni_dev_copy_dataset` and `bwuni_copy_dataset`.
 
 In this example, we use the HDF5 format to store the dataset. This is convenient, since you can save the dataset as one file, but still access it in parallel. Checkout https://docs.h5py.org/en/latest/quick.html for more information on how to use HDF5 with python.
 The dataset class now does not load the full data into memory during `__init__`. Instead, the data is accessed during the `__getitem__` method from the temporary storage `$TMPDIR`. 
@@ -196,6 +193,15 @@ The BwUni Cluster checks the amount if I/O operations and might kill your job if
 
 Note that loading from disk during `__getitem__` is slower than loading it from memory (even with multiple workers, compare the epoch over time plot in wandb for that!). Therefore, if you have a dataset that fits into memory, you should go for the simpler option and load it into memory during `__init__`. 
 
+
+## Turm Tool for Slurm overview
+We recommend using the `turm` tool to get a TUI overview of your jobs on the cluster. It is a nice way to monitor your jobs and see their status.
+You can install it via pip:
+```bash
+pip install turm
+```
+and run it by simply executing `turm` on the cluster. You can find more information on https://github.com/kabouzeid/turm
+![img.png](data/img.png)
 # Conclusion
 This repository showed you how to use Hydra, WandB, and Slurm together. This is a powerful combination to manage your experiments and to deploy them on a cluster.
 I hope this tutorial was helpful to you. If you have any questions, feel free to contact me. (philipp.dahlinger@kit.edu)

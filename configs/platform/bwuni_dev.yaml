@@ -3,10 +3,6 @@
 defaults:
   - override /hydra/launcher: submitit_slurm
 
-# change path_to_dataset in dataset to the TMPDIR
-dataset:
-  path_to_dataset: "$TMPDIR"
-
 hydra:
   mode: MULTIRUN  # needed for launcher to be used
   run:
@@ -16,14 +12,8 @@ hydra:
     subdir: ${name}/seed_${seed}
   launcher:
     # launcher/cluster specific options
-    partition: "dev_gpu_4"
+    partition: "gpu_a100_short,dev_gpu_h100,dev_gpu_a100_il"
     timeout_min: 30 # in minutes, maximum time on this queue
     gres: gpu:1  # one gpu allocated
-    mem_per_gpu: 94000  # in MB
-    additional_parameters:
-      cpus-per-task: 4  # maybe more?
-    setup:
-      - "cp ./outputs/datasets/on_disk_train.hdf5 $TMPDIR/on_disk_train.hdf5"
-      - "cp ./outputs/datasets/on_disk_test.hdf5 $TMPDIR/on_disk_test.hdf5"
-      - "ls $TMPDIR"
+
 

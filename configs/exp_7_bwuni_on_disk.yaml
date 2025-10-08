@@ -1,7 +1,7 @@
 defaults:
   - algorithm: mlp
   - dataset: on_disk
-  - platform: bwuni_dev_gpu_4_copy_dataset
+  - platform: bwuni_dev_copy_dataset
   - _self_
 
 
